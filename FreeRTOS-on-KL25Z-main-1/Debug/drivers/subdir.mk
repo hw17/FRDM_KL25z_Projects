@@ -8,6 +8,8 @@ C_SRCS += \
 ../drivers/fsl_common.c \
 ../drivers/fsl_flash.c \
 ../drivers/fsl_gpio.c \
+../drivers/fsl_i2c.c \
+../drivers/fsl_i2c_freertos.c \
 ../drivers/fsl_lpsci.c \
 ../drivers/fsl_lpsci_freertos.c \
 ../drivers/fsl_smc.c \
@@ -19,6 +21,8 @@ C_DEPS += \
 ./drivers/fsl_common.d \
 ./drivers/fsl_flash.d \
 ./drivers/fsl_gpio.d \
+./drivers/fsl_i2c.d \
+./drivers/fsl_i2c_freertos.d \
 ./drivers/fsl_lpsci.d \
 ./drivers/fsl_lpsci_freertos.d \
 ./drivers/fsl_smc.d \
@@ -30,6 +34,8 @@ OBJS += \
 ./drivers/fsl_common.o \
 ./drivers/fsl_flash.o \
 ./drivers/fsl_gpio.o \
+./drivers/fsl_i2c.o \
+./drivers/fsl_i2c_freertos.o \
 ./drivers/fsl_lpsci.o \
 ./drivers/fsl_lpsci_freertos.o \
 ./drivers/fsl_smc.o \
@@ -41,7 +47,7 @@ OBJS += \
 drivers/%.o: ../drivers/%.c drivers/subdir.mk
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU C Compiler'
-	arm-none-eabi-gcc -std=gnu99 -D__REDLIB__ -DCPU_MKL25Z128VLK4 -DCPU_MKL25Z128VLK4_cm0plus -DDEBUG -DFSL_RTOS_FREE_RTOS -DFRDM_KL25Z -DFREEDOM -DSDK_DEBUGCONSOLE=1 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/board" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/source" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/CMSIS" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/drivers" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/utilities" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/freertos" -I"/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/startup" -O0 -fno-common -g -gdwarf-4 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fmerge-constants -fmacro-prefix-map="$(<D)/"= -mcpu=cortex-m0plus -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	arm-none-eabi-gcc -std=gnu99 -DCPU_MKL25Z128VLK4 -DCPU_MKL25Z128VLK4_cm0plus -DDEBUG -DFSL_RTOS_FREE_RTOS -DFRDM_KL25Z -DFREEDOM -DSDK_DEBUGCONSOLE=1 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DSDK_OS_FREE_RTOS -D__REDLIB__ -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\CMSIS" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\drivers" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\freertos" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\utilities" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\board" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\source" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1" -I"C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\startup" -O0 -fno-common -g -gdwarf-4 -Wall -c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections -fmerge-constants -fmacro-prefix-map="$(<D)/"= -mcpu=cortex-m0plus -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
@@ -49,7 +55,7 @@ drivers/%.o: ../drivers/%.c drivers/subdir.mk
 clean: clean-drivers
 
 clean-drivers:
-	-$(RM) ./drivers/fsl_clock.d ./drivers/fsl_clock.o ./drivers/fsl_common.d ./drivers/fsl_common.o ./drivers/fsl_flash.d ./drivers/fsl_flash.o ./drivers/fsl_gpio.d ./drivers/fsl_gpio.o ./drivers/fsl_lpsci.d ./drivers/fsl_lpsci.o ./drivers/fsl_lpsci_freertos.d ./drivers/fsl_lpsci_freertos.o ./drivers/fsl_smc.d ./drivers/fsl_smc.o ./drivers/fsl_uart.d ./drivers/fsl_uart.o ./drivers/fsl_uart_freertos.d ./drivers/fsl_uart_freertos.o
+	-$(RM) ./drivers/fsl_clock.d ./drivers/fsl_clock.o ./drivers/fsl_common.d ./drivers/fsl_common.o ./drivers/fsl_flash.d ./drivers/fsl_flash.o ./drivers/fsl_gpio.d ./drivers/fsl_gpio.o ./drivers/fsl_i2c.d ./drivers/fsl_i2c.o ./drivers/fsl_i2c_freertos.d ./drivers/fsl_i2c_freertos.o ./drivers/fsl_lpsci.d ./drivers/fsl_lpsci.o ./drivers/fsl_lpsci_freertos.d ./drivers/fsl_lpsci_freertos.o ./drivers/fsl_smc.d ./drivers/fsl_smc.o ./drivers/fsl_uart.d ./drivers/fsl_uart.o ./drivers/fsl_uart_freertos.d ./drivers/fsl_uart_freertos.o
 
 .PHONY: clean-drivers
 
