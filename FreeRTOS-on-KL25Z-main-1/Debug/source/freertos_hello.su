@@ -1,0 +1,6 @@
+../source/freertos_hello.c:92:5:main	40	static
+../source/freertos_hello.c:120:13:createSemaphore	8	static
+../source/freertos_hello.c:139:13:task1	24	static
+../source/freertos_hello.c:166:13:task2	24	static
+../source/freertos_hello.c:186:13:senderTask	16	static
+../source/freertos_hello.c:216:13:receiverTask	24	static
