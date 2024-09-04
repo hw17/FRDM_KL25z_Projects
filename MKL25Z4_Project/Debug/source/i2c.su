@@ -1,0 +1,4 @@
+../source/i2c.c:10:6:I2C_WriteRegister	24	static
+../source/i2c.c:27:15:I2C_ReadRegister	32	static
+../source/i2c.c:54:6:I2C_ReadMultiRegisters	32	static
+../source/i2c.c:92:6:Pause	24	static
