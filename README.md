@@ -1,8 +1,10 @@
-# FreeRTOS-on-KL25Z
-This project creates and executes 4 tasks to implement the following functionalities
-1. Turn ON the RED LED on the KL25Z board
-2. Turn ON the GREEN LED on the KL25Z board
-3. Send a value from the sender task using message queue
-4. Receive the value on the receiver task using message queue
+# OVERVIEW
+This repo is a collection of projects implemented on a NXP FRDM-KL25Z using both FreeRTOS and General Purpose (Bare Metal) programming
+````
+https://www.mouser.com/pdfDocs/NXP_FRDM-KL25Z_UM.pdf
+```` 
+## FreeRTOS-on-KL25Z
+This project creates and executes 4 tasks. Taken from https://github.com/dhirajbennadi/FreeRTOS-on-KL25Z as a template. It´s also inteded to manage several tasks interfacing sensors and communication ports
 
-The project also demonstrates the functionalities of MUTEX to protect critical resources, in this case the shared resource (PRINT statements)
+## MKL25Z4_Project
+This project is inteded to manage sensors and communication ports
