@@ -1,7 +1,0 @@
-/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/drivers/fsl_clock.h:745:20:CLOCK_SetSimSafeDivs	8	static
-/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/drivers/fsl_clock.h:1076:20:CLOCK_SetXtal0Freq	16	static
-/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/drivers/fsl_smc.h:283:20:SMC_SetPowerModeProtection	16	static
-/Users/hectorguarneros/Documents/MCUXpressoIDE_11.9.0_2144/workspace/FreeRTOS_KL25z_Project/FreeRTOS-on-KL25Z-main-1/drivers/fsl_smc.h:302:33:SMC_GetPowerModeState	16	static
-../board/clock_config.c:98:13:CLOCK_CONFIG_SetFllExtRefDiv	16	static
-../board/clock_config.c:183:6:BOARD_BootClockRUN	8	static
-../board/clock_config.c:276:6:BOARD_BootClockVLPR	8	static
