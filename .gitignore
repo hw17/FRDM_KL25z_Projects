@@ -1,0 +1,11 @@
+.DS_Store
+*.d
+*.o
+*.obj
+*.elf
+*.ld
+*.axf
+*.map
+*.su
+*.d
+*.mk
