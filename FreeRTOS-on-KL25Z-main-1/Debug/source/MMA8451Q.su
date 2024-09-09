@@ -1,8 +1,0 @@
-C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\CMSIS/core_cm0plus.h:745:22:NVIC_EnableIRQ	16	static
-C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\CMSIS/core_cm0plus.h:756:22:NVIC_DisableIRQ	16	static
-C:\Users\hector.torre\Documents\MCUXpressoIDE_11.9.0_2144\workspace\FreeRTOS_KL25z_Project\FreeRTOS-on-KL25Z-main-1\CMSIS/core_cm0plus.h:791:22:NVIC_ClearPendingIRQ	16	static
-../source/MMA8451Q.c:17:6:MCU_Init	8	static
-../source/MMA8451Q.c:44:6:Accelerometer_Init	16	static
-../source/MMA8451Q.c:60:6:Calibrate	16	static
-../source/MMA8451Q.c:87:6:PORTA_IRQHandler	8	static
-../source/MMA8451Q.c:93:6:RunMMA8451Q	40	static
