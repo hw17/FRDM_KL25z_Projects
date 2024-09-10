@@ -12,3 +12,16 @@ This project creates and executes 4 tasks. Taken from [dhirajbennadi GitHub](htt
 ## MKL25Z4_Project
 This project is inteded to manage sensors and communication ports:
 - [Accelerometer MMA8451Q](https://www.nxp.com/docs/en/data-sheet/MMA8451Q.pdf)
+
+# How to create a new project
+- Create an NXP account. 
+- Download and install [MCUXpresso IDE](https://nxp.flexnetoperations.com/control/frse/download?element=6330721)
+- Select and install MCUXpresso SDKs (KL25Z) 
+![image](https://github.com/user-attachments/assets/3c9eb699-be01-4cc9-aa28-94a61a753b4e)
+
+![image](https://github.com/user-attachments/assets/563054b9-c9e7-4705-96fa-62b1eb635391)
+
+![image](https://github.com/user-attachments/assets/dd84a458-7340-4ddb-ac3f-da41555a7b59)
+
+> Select project type and project´s name, then click on finish
+![image](https://github.com/user-attachments/assets/a79d382d-175a-4f76-8c6e-206725fdb541)
