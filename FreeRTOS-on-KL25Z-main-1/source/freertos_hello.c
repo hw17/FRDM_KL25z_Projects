@@ -44,29 +44,12 @@
 #include "semphr.h"
 
 #include "led.h"
+#include "i2c.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-
 /* Task priorities. */
 #define hello_task_PRIORITY (configMAX_PRIORITIES - 1)
-
-#define DELAY_LOOP 65535
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
-//static void hello_task(void *pvParameters);
-//static void hello_task2(void *pvParameters);
-SemaphoreHandle_t xSemaphoreMutex;
-QueueHandle_t msgQueue1;
-
-static void createSemaphore(void);
-
-static void task1(void *pvParameters);
-static void task2(void *pvParameters);
-
-static void senderTask(void *pvParameters);
-static void receiverTask(void *pvParameters);
 
 typedef struct{
 	TaskFunction_t pxTaskCode;
@@ -77,12 +60,29 @@ typedef struct{
 	TaskHandle_t * const pxCreatedTask;
 }tasks_t;
 
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+static void createSemaphore(void);
+static void task1(void *pvParameters);
+static void task2(void *pvParameters);
+static void senderTask(void *pvParameters);
+static void receiverTask(void *pvParameters);
+
+/******************************************************************************
+* Global variables
+******************************************************************************/
+SemaphoreHandle_t xSemaphoreMutex;
+QueueHandle_t msgQueue1;
+
 tasks_t Tasks_List[] = {
-		{task1, "Task1", configMINIMAL_STACK_SIZE + 10, "Task 1 executing", hello_task_PRIORITY, NULL},
-		{task2, "Task2", configMINIMAL_STACK_SIZE + 10, "Task 2 Executing", hello_task_PRIORITY, NULL},
-		{senderTask, "senderTask", configMINIMAL_STACK_SIZE + 50, "senderTask executing", hello_task_PRIORITY, NULL},
-		{receiverTask, "receiverTask", configMINIMAL_STACK_SIZE + 50, "receiverTask executing", hello_task_PRIORITY - 1, NULL},
+	/*  Task Function,  Task Name	  ,	Stack size for the task		 , Task parameter pointer  ,	Task priority 		  ,	Used to pass out the created task's handle.*/
+		{task1, 		"Task1", 		configMINIMAL_STACK_SIZE + 10, "Task 1 executing", 			hello_task_PRIORITY, 		NULL},
+		{task2, 		"Task2", 		configMINIMAL_STACK_SIZE + 10, "Task 2 Executing", 			hello_task_PRIORITY, 		NULL},
+		{senderTask, 	"senderTask", 	configMINIMAL_STACK_SIZE + 50, "senderTask executing",		hello_task_PRIORITY, 		NULL},
+		{receiverTask, 	"receiverTask", configMINIMAL_STACK_SIZE + 50, "receiverTask executing", 	hello_task_PRIORITY - 1,	NULL},
 };
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -97,6 +97,9 @@ int main(void)
     BOARD_InitDebugConsole();
 
     LED_Init();
+    MCU_Init();
+    Accelerometer_Init();
+    Calibrate();
 
     createSemaphore();
 
@@ -117,21 +120,17 @@ int main(void)
 static void createSemaphore(void){
     xSemaphoreMutex = xSemaphoreCreateMutex();
 
-    if(xSemaphoreMutex != NULL)
-    {
-    	PRINTF("Mutex was successfully created\n\r");
+    if(xSemaphoreMutex == NULL){
+    	PRINTF("[ERROR] Mutex creation failed\n\r");
     }
-    else
-    {
-    	PRINTF("Mutex creation failed\n\r");
-    }
+    else{/* Do nothing */}
 
     msgQueue1 = xQueueCreate(5 , sizeof(int));
 
-    if(msgQueue1 == NULL)
-    {
-    	PRINTF("Message queue created failed\n\r");
+    if(msgQueue1 == NULL){
+    	PRINTF("[ERROR] Message queue created failed\n\r");
     }
+    else{/* Do nothing*/}
 }
 
 /*!
@@ -141,21 +140,21 @@ static void task1(void *pvParameters)
 {
 	uint8_t *str = pvParameters;
 
-
     for (;;)
     {
-    	if( xSemaphoreTake( xSemaphoreMutex, ( TickType_t ) 10000 ) == pdTRUE )
-    	{
+    	// See if we can obtain the semaphore.  If the semaphore is not available
+    	// wait 10000 ticks to see if it becomes free.
+    	if( xSemaphoreTake( xSemaphoreMutex, ( TickType_t ) 10000 ) == pdTRUE ){
     		PRINTF("%s.\n\r", str);
     		ControlRedLed(1);
-    		vTaskDelay(1000);
+    		RunMMA8451Q();
+    		vTaskDelay(1010);
     		PRINTF("Task 1 Ended\n\r");
     		xSemaphoreGive(xSemaphoreMutex);
-    		vTaskDelay(1000);
+    		vTaskDelay(1010);
     	}
-    	else
-    	{
-    		PRINTF("Mutex could not be acquired by Task 1\n\r");
+    	else{
+    		PRINTF("[ERROR] Mutex could not be acquired by Task 1\n\r");
     	}
 
     }
@@ -168,20 +167,18 @@ static void task2(void *pvParameters)
 {
 	uint8_t *str = pvParameters;
 
-    for (;;)
-    {
-    	if( xSemaphoreTake( xSemaphoreMutex, ( TickType_t ) 10000 ) == pdTRUE )
-    	{
+    for (;;){
+    	if( xSemaphoreTake( xSemaphoreMutex, ( TickType_t ) 10000 ) == pdTRUE ){
+
     		PRINTF("%s.\n\r", str);
     		ControlGreenLed(1);
-    		vTaskDelay(1000);
-    		PRINTF("Task 2 Ended\n\r");
+    		vTaskDelay(1010);
+    		PRINTF("\nTask 2 Ended\n\r");
     		xSemaphoreGive(xSemaphoreMutex);
-    		vTaskDelay(1000);
+    		vTaskDelay(1010);
     	}
-    	else
-    	{
-    		PRINTF("Mutex could not be acquired by Task 2\n\r");
+    	else{
+    		PRINTF("[ERROR] Mutex could not be acquired by Task 2\n\r");
     	}
     }
 }
@@ -190,8 +187,7 @@ static void senderTask(void *pvParameters)
 {
 	static int value = 0;
 
-	while(1)
-	{
+	while(1){
 		if(xQueueSend( /* The handle of the queue. */
 						msgQueue1,
 		               /* The address of the xMessage variable.  sizeof( struct AMessage )
@@ -200,13 +196,12 @@ static void senderTask(void *pvParameters)
 		               /* Block time of 0 says don't block if the queue is already full.
 		               Check the value returned by xQueueSend() to know if the message
 		               was sent to the queue successfully. */
-		               ( TickType_t ) 1000 ) == pdPASS)
-		{
-			PRINTF("Message Sent Sucessfully\n\r");
+		               ( TickType_t ) 1000 ) == pdPASS){
+			PRINTF("Message Sent Successfully\n\r");
 		}
 
 		else{
-			PRINTF("Message Sending Failed\n\r");
+			PRINTF("[ERROR] Message Sending Failed\n\r");
 		}
 
 		vTaskDelay(1000);
@@ -217,23 +212,22 @@ static void senderTask(void *pvParameters)
 		}
 	}
 }
+
 static void receiverTask(void *pvParameters)
 {
 	int value = 0;
-
 	vTaskDelay(100);
-	while(1)
-	{
+	while(1){
+		// Receive a message on the created queue.  Block for 1000 ticks if a
+		// message is not immediately available.
 	    if( xQueueReceive( msgQueue1,
 	                       (void*)&( value),
-	                       ( TickType_t ) 1000 ) == pdPASS )
-	    {
+	                       ( TickType_t ) 1000 ) == pdPASS ){
 	    	PRINTF("Message Received = %d\n\r", value);
 
 	    }
-	    else
-	    {
-	    	PRINTF("Failed to receive a message\n\r");
+	    else{
+	    	PRINTF("[ERROR] Failed to receive a message\n\r");
 	    }
 
 	    vTaskDelay(1000);
